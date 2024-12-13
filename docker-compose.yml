@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  backend_404:
+      build:
+        context: ./backend
+        dockerfile: Dockerfile
+      container_name: site-404-backend
+      ports:
+        - "3001:3001"
+      networks:
+        - sshfolio-network
+      restart: unless-stopped
+  frontend_404:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: site-404-sshfolio
+    ports:
+      - "3000:80"
+    depends_on:
+      - sshfolio_backend
+    networks:
+      - sshfolio-network
+    restart: unless-stopped
+
+networks:
+  sshfolio-network:
+    driver: bridge

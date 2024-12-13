@@ -1,0 +1,14 @@
+{
+  "name": "site-404-proxy-backend",
+  "version": "1.0.0",
+  "description": "WebSocket proxy server for my 404 page",
+  "main": "proxy.js",
+  "scripts": {
+    "start": "node proxy.js"
+  },
+  "dependencies": {
+    "@xterm/xterm": "^5.5.0",
+    "ws": "^8.13.0",
+    "ssh2": "^1.11.0"
+  }
+}
