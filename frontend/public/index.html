@@ -26,9 +26,21 @@
         <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.min.js"></script>
         <script src="assets/script.js"></script>
     </head>
-    <body class="w-screen h-screen flex justify-center bg-[#1e1e1e]">
-        <div class="absolute z-50 bottom-5">
-            <p class="text-white">test</p>
+    <body class="w-screen h-screen flex justify-center bg-black">
+        <img class="w-screen h-[80%] object-cover object-bottom" src="assets/images/bg.png" alt="">
+        <div class="absolute z-50 flex flex-col items-center bottom-[60px]">
+            <div class="w-[50vw] h-[1px]"></div>
+            <p id="prompt" class="text-[#bfbfbf] text-5xl font-mono"></p>
+            
+            <div class="flex">
+                <p id="prompt2" class="text-[#bfbfbf] text-5xl font-mono group-hover:hidden"></p>
+                <input class="w-[25%] bg-black text-white text-4xl font-mono" type="text">
+            </div>
+            
+            <!-- <div class="group relative">
+                <p id="prompt2" class="text-[#bfbfbf] text-5xl font-mono underline group-hover:hidden"></p>
+                <a href="https://zachl.tech" class="text-[#7f7f7f] text-5xl font-mono hidden underline group-hover:block">Go Home</a>
+            </div> -->
         </div>
         <div id="terminal" class="bg-black hidden w-full h-full rounded-lg p-4 *:overflow-y-hidden"></div>
     </body>    

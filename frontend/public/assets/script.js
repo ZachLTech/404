@@ -134,6 +134,28 @@ function disconnect() {
 //     statusElement.style.color = type === 'error' ? '#ff4444' : '#ffffff';
 // }
 
+function type(element, text, speed = 50, delay = 0) {
+    setTimeout(() => {
+        let index = 0;
+        
+        const typeInterval = setInterval(() => {
+            if (index < text.length) {
+                element.textContent += text.charAt(index);
+                index++;
+            } else {
+                clearInterval(typeInterval);
+            }
+        }, speed);
+    }, delay);
+}
+
 window.addEventListener('load', () => {
+    let typingElement = document.getElementById("prompt")
+    let typingElement2 = document.getElementById("prompt2")
+    type(typingElement, 'It\'s quiet in here', 60)
+    type(typingElement, '...', 400, 60*20)
+    type(typingElement, ' 404', 200, 400*4+60*20)
+    type(typingElement2, 'What do you do? > ', 60, 200*3+400*4+60*20)
+    
     // initTerminal();
 });
