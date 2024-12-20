@@ -9,7 +9,7 @@ services:
       ports:
         - "3001:3001"
       networks:
-        - sshfolio-network
+        - page-404-network
       restart: unless-stopped
   frontend_404:
     build:
@@ -19,11 +19,11 @@ services:
     ports:
       - "3000:80"
     depends_on:
-      - sshfolio_backend
+      - backend_404
     networks:
-      - sshfolio-network
+      - page-404-network
     restart: unless-stopped
 
 networks:
-  sshfolio-network:
+  page-404-network:
     driver: bridge
