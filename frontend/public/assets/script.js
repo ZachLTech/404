@@ -1,9 +1,16 @@
 let term;
 let socket;
+let termFontSize;
 let isConnected = false;
-const PROXY_URL = 'ws://localhost:3001';
+const PROXY_URL = 'wss://exit-api.zachl.tech';
 
 function initTerminal() {
+    if (getWidth() > 630) {
+        termFontSize = 24
+    } else {
+        termFontSize = 10
+    }
+
     term = new Terminal({
         cursorBlink: true,
         theme: {
@@ -11,20 +18,20 @@ function initTerminal() {
             foreground: '#ffffff'
         },
         fontFamily: 'Menlo, Monaco, "Courier New", monospace',
-        fontSize: 14,
+        fontSize: termFontSize,
         letterSpacing: 0,
         lineHeight: 1,
-        scrollback: 1000,
-        // cols: Math.floor(window.innerWidth / 9),
-        // rows: Math.floor(window.innerHeight / 16)
+        scrollback: 1500
     });
     
     const container = document.getElementById('terminal');
+    container.style.display = "block";
+    container.style.position = "absolute";
+    container.style.zIndex = "100";
     term.open(container);
 
-    term.write('\r\x1B[1;32mTerminal Initialized Successfully!\x1B[0m\r\n\n');
-    term.write('\r\x1B[37m# Hit the connect button above to run the following command\x1B[0m\r');
-    term.write('\r\n\x1B[94m[visitor@sshfolio ~]$ \x1B[0mssh zachl.tech\n');
+    term.write('\r\x1B[1;32mTerminal Initialized Successfully!\x1B[0m\r\n');
+    term.write('\r\n\x1B[94m[samsepiol@mrrobots4e11 ~]$ \x1B[0mssh -p 24 exit.zachl.tech\n');
 
     const fitAddon = new FitAddon.FitAddon();
     term.loadAddon(fitAddon);
@@ -33,11 +40,14 @@ function initTerminal() {
         fitAddon.fit();
         term.focus();
     }, 0);
-    
-    // const dims = fitAddon.proposeDimensions();
-    // if (dims) {
-    //     term.resize(dims.cols, dims.rows);
-    // }
+
+    term.onKey(({ key, domEvent }) => {
+        if (domEvent.ctrlKey && domEvent.key === 'c') {
+            if (isConnected) {
+                disconnect();
+            }
+        }
+    });
 
     window.addEventListener('resize', () => {
         fitAddon.fit();
@@ -51,24 +61,16 @@ function initTerminal() {
     });
 }
 
-// function updateButtons(connected) {
-//     document.getElementById('connectBtn').disabled = connected;
-//     document.getElementById('disconnectBtn').disabled = !connected;
-// }
-
 function connect() {
-    if (isConnected) return;
-    
-    // updateStatus('Connecting...');
-    
+    if (isConnected) return;    
     try {
         socket = new WebSocket(PROXY_URL);
         
         socket.onopen = () => {
             isConnected = true;
-            // updateStatus('Connected');
-            // updateButtons(true);
-            term.write('\r\n\x1B[1;32mConnected to zachl.tech\x1B[0m\r');
+            term.write('\r\n\x1B[1;32mGood Afternoon Elliot.\x1B[0m\r\n\n');
+            term.write('\x1B[1;31mMORE COMING SOON\n\n\x1B[0m\r\n');
+            term.write('\x1B[1;31mIf you\'re now stuck here, refresh the page.\n\n\x1B[0m\r\n\n')
 
             const dimensions = {
                 cols: term.cols,
@@ -83,6 +85,10 @@ function connect() {
             
             term.onData(data => {
                 if (isConnected) {
+                    if (data.includes("exit") || data.includes("\u0003")) {
+                        disconnect();
+                        return;
+                    }
                     socket.send(JSON.stringify({
                         type: 'data',
                         data: data
@@ -92,7 +98,27 @@ function connect() {
         };
         
         socket.onmessage = (event) => {
-            term.write(event.data);
+            try {
+                const message = JSON.parse(event.data);
+                if (message.type === 'status') {
+                    switch(message.status) {
+                        case 'disconnected':
+                        case 'error':
+                            isConnected = false;
+                            disconnect();
+                            return;
+                    }
+                }
+                if (typeof event.data === 'string' && 
+                    (event.data.includes("Connection closed") || 
+                     event.data.includes("Session ended"))) {
+                    disconnect();
+                    return;
+                }
+                term.write(event.data);
+            } catch (e) {
+                term.write(event.data);
+            }
         };
         
         socket.onclose = () => {
@@ -101,13 +127,11 @@ function connect() {
         
         socket.onerror = (error) => {
             console.error('WebSocket error:', error);
-            // updateStatus('Connection error', 'error');
             disconnect();
         };
         
     } catch (error) {
         console.error('Connection error:', error);
-        // updateStatus('Failed to connect', 'error');
         disconnect();
     }
 }
@@ -120,19 +144,14 @@ function disconnect() {
     }
     
     isConnected = false;
-    // updateStatus('Disconnected');
-    updateButtons(false);
     term.clear();
-    term.write('\r\n\x1B[1;31mDisconnected from zachl.tech\x1B[0m\r\n\n');
-    term.write('\r\x1B[37m# Hit the connect button above again to try it again :D\x1B[0m\r');
-    term.write('\r\n\x1B[94m[visitor@sshfolio ~]$ \x1B[0mssh zachl.tech');
+    term.write('\r\n\x1B[1;31mDisconnected from exit.zachl.tech\x1B[0m\r\n\n');
+    term.dispose()
+    const container = document.getElementById('terminal');
+    container.style.display = "none";
+    container.style.position = "absolute";
+    container.style.zIndex = "-100";
 }
-
-// function updateStatus(message, type = 'info') {
-//     const statusElement = document.getElementById('status');
-//     statusElement.textContent = message;
-//     statusElement.style.color = type === 'error' ? '#ff4444' : '#ffffff';
-// }
 
 function type(element, text, speed = 50, delay = 0) {
     setTimeout(() => {
@@ -149,13 +168,25 @@ function type(element, text, speed = 50, delay = 0) {
     }, delay);
 }
 
+function getWidth() {
+    return Math.max(
+        document.body.scrollWidth,
+        document.documentElement.scrollWidth,
+        document.body.offsetWidth,
+        document.documentElement.offsetWidth,
+        document.documentElement.clientWidth
+    );
+}
+
+async function handleEasterEgg() {
+    await initTerminal();
+    connect();
+}
+
 window.addEventListener('load', () => {
     let typingElement = document.getElementById("prompt")
     let typingElement2 = document.getElementById("prompt2")
     type(typingElement, 'It\'s quiet in here', 60)
     type(typingElement, '...ㅤ', 400, 60*20)
     type(typingElement2, 'Go Home?', 80, 400*4+60*20)
-    // type(typingElement2, 'What do you do? > ', 60, 200*3+400*4+60*20)
-    
-    // initTerminal();
 });

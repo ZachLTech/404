@@ -33,15 +33,17 @@
         </div>
         <img class="w-screen h-[80%] object-cover object-bottom select-none" src="assets/images/bg.png" alt="">
         <div class="absolute flex justify-center items-center w-screen h-screen">
-            <button class="absolute w-[45vh] h-[50vw] sm:w-[25vw] sm:h-[50vh] bg-transparent border-2 border-white"></button>
+            <button onclick="handleEasterEgg()" class="absolute w-[45vw] h-[40vh] sm:w-[25vw] sm:h-[50vh] bg-transparent"></button>
         </div>
         <div class="absolute z-50 flex justify-center bottom-[60px]">
-            <p id="prompt" class="text-[#bfbfbf] text-5xl font-mono"></p>
+            <p id="prompt" class="text-[#bfbfbf] text-lg sm:text-5xl font-mono"></p>
             <div class="group relative">
-                <p id="prompt2" class="text-[#bfbfbf] text-5xl font-mono underline group-hover:hidden"></p>
-                <a href="https://zachl.tech" class="text-[#7f7f7f] text-5xl font-mono hidden underline group-hover:block">Go Home?</a>
+                <p id="prompt2" class="text-[#bfbfbf] text-lg sm:text-5xl font-mono underline group-hover:hidden"></p>
+                <a href="https://zachl.tech" class="text-[#7f7f7f] text-lg sm:text-5xl font-mono hidden underline group-hover:block">Go Home?</a>
             </div>
         </div>
-        <div id="terminal" class="bg-black hidden w-full h-full rounded-lg p-4 *:overflow-y-hidden"></div>
+        <div id="terminal" class="bg-black hidden -z-50 w-full h-full rounded-lg p-4 *:overflow-y-hidden">
+            <button onclick="disconnect()" class="absolute z-[500] top-3 sm:top-5 sm:text-xl text-mono right-5 sm:right-12 text-slate-500 hover:text-slate-600 opacity-50">Close Term</button>
+        </div>
     </body>    
 </html>
