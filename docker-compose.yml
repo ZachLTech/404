@@ -15,7 +15,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: site-404-sshfolio
+    container_name: site-404-frontend
     ports:
       - "3000:80"
     depends_on:
