@@ -153,9 +153,9 @@ window.addEventListener('load', () => {
     let typingElement = document.getElementById("prompt")
     let typingElement2 = document.getElementById("prompt2")
     type(typingElement, 'It\'s quiet in here', 60)
-    type(typingElement, '...', 400, 60*20)
-    type(typingElement, ' 404', 200, 400*4+60*20)
-    type(typingElement2, 'What do you do? > ', 60, 200*3+400*4+60*20)
+    type(typingElement, '...ㅤ', 400, 60*20)
+    type(typingElement2, 'Go Home?', 80, 400*4+60*20)
+    // type(typingElement2, 'What do you do? > ', 60, 200*3+400*4+60*20)
     
     // initTerminal();
 });

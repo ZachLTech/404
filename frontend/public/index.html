@@ -27,20 +27,20 @@
         <script src="assets/script.js"></script>
     </head>
     <body class="w-screen h-screen flex justify-center bg-black">
-        <img class="w-screen h-[80%] object-cover object-bottom" src="assets/images/bg.png" alt="">
-        <div class="absolute z-50 flex flex-col items-center bottom-[60px]">
-            <div class="w-[50vw] h-[1px]"></div>
+        <div class="absolute top-12 flex flex-col justify-center items-center">
+            <h1 class="text-9xl font-mono text-[#0c6e63] tracking-widest">404</h1>
+            <h1 class="text-4xl font-mono text-[#0c6e63] tracking-widest">PAGE NOT FOUND</h1>
+        </div>
+        <img class="w-screen h-[80%] object-cover object-bottom select-none" src="assets/images/bg.png" alt="">
+        <div class="absolute flex justify-center items-center w-screen h-screen">
+            <button class="absolute w-[45vh] h-[50vw] sm:w-[25vw] sm:h-[50vh] bg-transparent border-2 border-white"></button>
+        </div>
+        <div class="absolute z-50 flex justify-center bottom-[60px]">
             <p id="prompt" class="text-[#bfbfbf] text-5xl font-mono"></p>
-            
-            <div class="flex">
-                <p id="prompt2" class="text-[#bfbfbf] text-5xl font-mono group-hover:hidden"></p>
-                <input class="w-[25%] bg-black text-white text-4xl font-mono" type="text">
-            </div>
-            
-            <!-- <div class="group relative">
+            <div class="group relative">
                 <p id="prompt2" class="text-[#bfbfbf] text-5xl font-mono underline group-hover:hidden"></p>
-                <a href="https://zachl.tech" class="text-[#7f7f7f] text-5xl font-mono hidden underline group-hover:block">Go Home</a>
-            </div> -->
+                <a href="https://zachl.tech" class="text-[#7f7f7f] text-5xl font-mono hidden underline group-hover:block">Go Home?</a>
+            </div>
         </div>
         <div id="terminal" class="bg-black hidden w-full h-full rounded-lg p-4 *:overflow-y-hidden"></div>
     </body>    
