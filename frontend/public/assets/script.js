@@ -1,6 +1,7 @@
 let term;
 let socket;
 let termFontSize;
+let isAwake = false;
 let audioMuted = false;
 let isConnected = false;
 
@@ -29,7 +30,7 @@ function initTerminal() {
     const container = document.getElementById('terminal');
     container.style.display = "block";
     container.style.position = "absolute";
-    container.style.zIndex = "100";
+    container.style.zIndex = "1010";
     term.open(container);
 
     term.write('\r\x1B[1;32mTerminal Initialized Successfully!\x1B[0m\r\n');
@@ -167,7 +168,6 @@ function type(element, text, speed = 50, delay = 0) {
             playAudio(typeAudio)
         }
         
-        
         const typeInterval = setInterval(() => {
             if (index < text.length) {
                 if (speed > 200) {
@@ -214,6 +214,10 @@ function changeMuteSVG() {
 }
 
 async function handleEasterEgg() {
+    if (!isAwake) {
+        return
+    }
+
     const bgAudio = document.getElementById('bg-audio');
     if (bgAudio) {
         bgAudio.pause();
@@ -235,12 +239,35 @@ function playAudio(audio) {
 }
 
 window.addEventListener('load', () => {
-    setTimeout(() => {
-        let typingElement = document.getElementById("prompt")
-        let typingElement2 = document.getElementById("prompt2")
+    const wakeScreen = document.getElementById('wake-screen');
+    const mainContent = document.getElementById('main-content');
+    const bgAudio = document.getElementById('bg-audio');
+    
+    bgAudio.pause();
+
+    function wakeUp() {
+        wakeScreen.style.display = 'none';
+        mainContent.classList.remove('hidden-content');
+        mainContent.classList.add('fade-in');
+
+        setTimeout(() => {
+            mainContent.classList.add('fade-in');
+        }, 100);
         
-        type(typingElement, 'It\'s quiet in here', 60)
-        type(typingElement, '...ㅤ', 400, 60*20)
-        type(typingElement2, 'Go Home?', 80, 400*4+60*20)
-    }, 2000)
+        bgAudio.play();
+        
+        setTimeout(() => {
+            let typingElement = document.getElementById("prompt")
+            let typingElement2 = document.getElementById("prompt2")
+            
+            type(typingElement, 'It\'s quiet in here', 60)
+            type(typingElement, '...ㅤ', 400, 60*20)
+            type(typingElement2, 'Go Home?', 80, 400*4+60*20)
+
+            isAwake = true;
+        }, 2000);
+    }
+
+    wakeScreen.addEventListener('click', wakeUp);
+    wakeScreen.addEventListener('touchstart', wakeUp);
 });
