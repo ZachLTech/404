@@ -24,9 +24,17 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/xterm.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.min.js"></script>
-        <script src="assets/script.js"></script>
+        <script src="assets/script.js" defer></script>
     </head>
-    <body class="w-screen h-screen flex justify-center bg-black">
+    <body class="w-screen h-screen flex justify-center bg-black fade-in">
+        <audio id="bg-audio" autoplay loop>
+            <source src="./assets/audio/bg.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+        <button onclick="changeMuteSVG()" class="absolute top-5 left-5 z-[90] opacity-50">
+            <img id="unmuted" class="w-12 h-12 block" src="./assets/icons/volume.svg" alt="">
+            <img id="muted" class="w-11 h-11 hidden" src="./assets/icons/mute.svg" alt="">
+        </button>
         <div class="absolute top-12 flex flex-col justify-center items-center">
             <h1 class="text-9xl font-mono text-[#0c6e63] tracking-widest">404</h1>
             <h1 class="text-4xl font-mono text-[#0c6e63] tracking-widest">PAGE NOT FOUND</h1>

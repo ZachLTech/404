@@ -1,7 +1,9 @@
 let term;
 let socket;
 let termFontSize;
+let audioMuted = false;
 let isConnected = false;
+
 const PROXY_URL = 'wss://exit-api.zachl.tech';
 
 function initTerminal() {
@@ -156,12 +158,26 @@ function disconnect() {
 function type(element, text, speed = 50, delay = 0) {
     setTimeout(() => {
         let index = 0;
+        let typeAudio;
+        if (speed > 200) {
+            typeAudio = new Audio('./assets/audio/type.mp3');
+        } else {
+            typeAudio = new Audio('./assets/audio/typeFull.mp3');
+            typeAudio.volume = 1;
+            playAudio(typeAudio)
+        }
+        
         
         const typeInterval = setInterval(() => {
             if (index < text.length) {
+                if (speed > 200) {
+                    typeAudio.volume = 1;
+                    playAudio(typeAudio)
+                }
                 element.textContent += text.charAt(index);
                 index++;
             } else {
+                typeAudio.pause()
                 clearInterval(typeInterval);
             }
         }, speed);
@@ -178,15 +194,53 @@ function getWidth() {
     );
 }
 
+function changeMuteSVG() {
+    let unmutedIcon = document.getElementById("unmuted")
+    let mutedIcon = document.getElementById("muted")
+
+    if (unmutedIcon.style.display === 'none') {
+        unmutedIcon.style.display = 'block';
+        mutedIcon.style.display = 'none';
+
+        document.getElementById('bg-audio').play();
+        audioMuted = false;
+    } else {
+        unmutedIcon.style.display = 'none';
+        mutedIcon.style.display = 'block';
+        
+        document.getElementById('bg-audio').pause();
+        audioMuted = true;
+    }
+}
+
 async function handleEasterEgg() {
+    const bgAudio = document.getElementById('bg-audio');
+    if (bgAudio) {
+        bgAudio.pause();
+        bgAudio.currentTime = 0;
+    }
+    const staticAudio = new Audio('./assets/audio/static.mp3');
+    staticAudio.volume = 0.2;
+    playAudio(staticAudio)
     await initTerminal();
     connect();
 }
 
+function playAudio(audio) {
+    if (audioMuted) {
+        return
+    } else {
+        audio.play()
+    }
+}
+
 window.addEventListener('load', () => {
-    let typingElement = document.getElementById("prompt")
-    let typingElement2 = document.getElementById("prompt2")
-    type(typingElement, 'It\'s quiet in here', 60)
-    type(typingElement, '...ㅤ', 400, 60*20)
-    type(typingElement2, 'Go Home?', 80, 400*4+60*20)
+    setTimeout(() => {
+        let typingElement = document.getElementById("prompt")
+        let typingElement2 = document.getElementById("prompt2")
+        
+        type(typingElement, 'It\'s quiet in here', 60)
+        type(typingElement, '...ㅤ', 400, 60*20)
+        type(typingElement2, 'Go Home?', 80, 400*4+60*20)
+    }, 2000)
 });
